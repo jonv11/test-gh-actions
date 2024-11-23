@@ -34,3 +34,25 @@ jobs:
           git clone https://github.com/openvenues/jpostal.git
           cd jpostal
           ./gradlew assemble
+
+      - name: Copy Jpostal Libraries
+        run: |
+          mkdir -p libpostal
+          cp -r jpostal/build/libs/* libpostal/
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Commit and Push Changes
+        run: |
+          git add libpostal/
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Add compiled jpostal libraries"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
