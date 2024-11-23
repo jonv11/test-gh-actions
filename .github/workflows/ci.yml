@@ -1,0 +1,35 @@
+name: Compile Libpostal and Jpostal
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install -y curl autoconf automake libtool pkg-config
+
+      - name: Build Libpostal
+        run: |
+          git clone https://github.com/openvenues/libpostal.git
+          cd libpostal
+          ./bootstrap.sh
+          ./configure --datadir=/path/to/data
+          make
+          sudo make install
+
+      - name: Build Jpostal
+        run: |
+          git clone https://github.com/openvenues/jpostal.git
+          cd jpostal
+          ./gradlew assemble
