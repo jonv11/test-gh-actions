@@ -5,6 +5,7 @@ on:
 
 jobs:
   build:
+    name: Compile
 
     runs-on: ubuntu-latest
 
@@ -37,12 +38,13 @@ jobs:
           ./gradlew assemble
 
       - name: Copy Jpostal and Libpostal Libraries
+        # libs/libpostal will contain the so files for libpostal
+        # libs/jpostal will contain jar and shared and static libs for jpostal
         run: |
           mkdir -p libs/jpostal
           mkdir -p libs/libpostal
           cp -r jpostal/build/libs/* libs/jpostal/
           cp /usr/local/lib/libpostal.so* libs/libpostal/
-          cp -r /tmp/libpostal-data libs/libpostal/
 
       - name: Configure Git
         run: |
