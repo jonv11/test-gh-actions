@@ -35,10 +35,12 @@ jobs:
           cd jpostal
           ./gradlew assemble
 
-      - name: Copy Jpostal Libraries
+      - name: Copy Jpostal and Libpostal Libraries
         run: |
-          mkdir -p libpostal
-          cp -r jpostal/build/libs/* libpostal/
+          mkdir -p libs/jpostal
+          mkdir -p libs/libpostal
+          cp -r jpostal/build/libs/* libs/jpostal/
+          cp /usr/local/lib/libpostal.so* libs/libpostal/
 
       - name: Configure Git
         run: |
@@ -47,10 +49,10 @@ jobs:
 
       - name: Commit and Push Changes
         run: |
-          git add libpostal/
+          git add libs/
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Add compiled jpostal libraries"
-            git push
+            git commit -m "Add compiled jpostal and libpostal libraries"
+            git push https://${{ secrets.PAT_TOKEN }}@github.com/jonv11/test-gh-actions.git HEAD:main
           else
             echo "No changes to commit"
           fi
