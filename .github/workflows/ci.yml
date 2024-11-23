@@ -46,24 +46,15 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.name 'jonv11'
-          git config --global user.email 'jonv11@users.noreply.github.com'
-
-      - name: Debug Git Status
-        run: |
-          git status
-          git config --list
-
-      - name: Check PAT Authentication
-        run: |
-          curl -H "Authorization: token ${{ secrets.PAT_TOKEN }}" https://api.github.com/user
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: Commit and Push Changes
         run: |
           git add libs/
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Add compiled jpostal and libpostal libraries"
-            git push https://${{ secrets.PAT_TOKEN }}@github.com/jonv11/test-gh-actions.git HEAD:main
+            git push https://${{ secrets.GITHUB_TOKEN }}@github.com/jonv11/test-gh-actions.git HEAD:main
           else
             echo "No changes to commit"
           fi
