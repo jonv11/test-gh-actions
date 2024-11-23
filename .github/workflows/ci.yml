@@ -14,7 +14,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin' # You can choose another distribution if needed
+          distribution: 'temurin'
           java-version: '11'
 
       - name: Install Dependencies
@@ -41,11 +41,21 @@ jobs:
           mkdir -p libs/libpostal
           cp -r jpostal/build/libs/* libs/jpostal/
           cp /usr/local/lib/libpostal.so* libs/libpostal/
+          cp -r /tmp/libpostal-data libs/libpostal/
 
       - name: Configure Git
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Debug Git Status
+        run: |
+          git status
+          git config --list
+
+      - name: Check PAT Authentication
+        run: |
+          curl -H "Authorization: token ${{ secrets.PAT_TOKEN }}" https://api.github.com/user
 
       - name: Commit and Push Changes
         run: |
