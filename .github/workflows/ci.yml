@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '8'
 
       - name: Install Dependencies
         run: sudo apt-get update && sudo apt-get install -y curl autoconf automake libtool pkg-config
